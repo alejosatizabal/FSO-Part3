@@ -75,8 +75,20 @@ app.post('/api/persons', (request, response) => {
   
     if (!body.name) {
       return response.status(400).json({ 
-        error: 'name missing' 
+        error: 'Falta el nombre' 
       })
+    }
+    if (!body.number) {
+        return response.status(400).json({ 
+          error: 'Falta el número' 
+        })
+    }
+
+    const nombreRepetido = (persons.find(person => person.name == body.name))
+    if (nombreRepetido) {
+        return response.status(400).json({ 
+          error: 'El nombre debe ser unico' 
+        })
     }
   
     const person = {
