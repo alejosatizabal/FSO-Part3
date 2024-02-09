@@ -1,7 +1,15 @@
 const express = require('express')
 const app = express()
 
+var morgan = require('morgan')
+//app.use(morgan('tiny'))
+
 app.use(express.json())
+
+morgan.token('cuerpo', function(req, res) {
+  return JSON.stringify(req.body);
+  });
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :cuerpo'))
 
 let persons = [
     { 
@@ -25,6 +33,10 @@ let persons = [
         "number": "39-23-6423122"
     }
 ]
+
+app.get('/', function (req, res) {
+  res.send('hello, world!')
+})
 
 app.get('/info', (request, response) => {
     const numPersons = persons.length
@@ -61,12 +73,6 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-    // const maxId = notes.length > 0
-    //   ? Math.max(...notes.map(n => n.id))
-    //   : 0
-    // return maxId + 1
-
-    // let numeroGenerado = Math.floor(Math.random()*1000)+1
     return Math.floor(Math.random()*1000)+1
   }
   
