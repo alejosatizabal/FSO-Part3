@@ -1,5 +1,10 @@
+
+// CONFIGURACIÓN: INICIO
 const express = require('express')
 const app = express()
+
+const cors = require('cors')
+app.use(cors())
 
 var morgan = require('morgan')
 //app.use(morgan('tiny'))
@@ -10,7 +15,9 @@ morgan.token('cuerpo', function(req, res) {
   return JSON.stringify(req.body);
   });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :cuerpo'))
+// CONFIGURACIÓN: FIN
 
+// DATOS: INICIO
 let persons = [
     { 
         "id": 1,
@@ -33,11 +40,14 @@ let persons = [
         "number": "39-23-6423122"
     }
 ]
+// DATOS: FIN
 
+// Ruta get('/'
 app.get('/', function (req, res) {
   res.send('hello, world!')
 })
 
+// Ruta get('/info'
 app.get('/info', (request, response) => {
     const numPersons = persons.length
     const now = new Date();
@@ -49,10 +59,12 @@ app.get('/info', (request, response) => {
         )
 })
 
+// Ruta get('/api/persons'
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
+// Ruta get('/api/persons/:id'
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     console.log('id :>> ', id);
@@ -65,17 +77,22 @@ app.get('/api/persons/:id', (request, response) => {
     }
   })
 
+// Ruta delete('/api/persons/:id'
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
+    const personaEliminada = persons.find(person => person.id == id)
     persons = persons.filter(person => person.id !== id)
   
-    response.status(204).end()
+    console.log('personaEliminada BackEnd :>> ', personaEliminada);
+    //response.status(204).end() // Respuesta sin conectar al con el FrontEnd
+    response.json(personaEliminada) // Respuesta conectando con el FrontEnd
 })
 
 const generateId = () => {
     return Math.floor(Math.random()*1000)+1
   }
-  
+
+// Ruta post('/api/persons'
 app.post('/api/persons', (request, response) => {
     const body = request.body
   
@@ -102,9 +119,7 @@ app.post('/api/persons', (request, response) => {
         name: body.name,
         number: body.number
     }
-  
     persons = persons.concat(person)
-  
     response.json(person)
 })
 
