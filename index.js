@@ -11,6 +11,8 @@ var morgan = require('morgan')
 
 app.use(express.json())
 
+app.use(express.static('dist')) // Para que el BackEnd redireccione a 'dist', el Front build
+
 morgan.token('cuerpo', function(req, res) {
   return JSON.stringify(req.body);
   });
@@ -123,7 +125,8 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = 3001
+//const PORT = 3001
+const PORT = process.env.PORT || 3001 // Para desplegar en Internet
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
