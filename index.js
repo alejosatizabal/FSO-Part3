@@ -84,33 +84,23 @@ const generateId = () => {
 
 // Ruta post('/api/persons'
 app.post('/api/persons', (request, response) => {
-    const body = request.body
-  
-    if (!body.name) {
-      return response.status(400).json({ 
-        error: 'Falta el nombre' 
-      })
-    }
-    if (!body.number) {
-        return response.status(400).json({ 
-          error: 'Falta el número' 
-        })
-    }
+  const body = request.body
 
-    const nombreRepetido = (persons.find(person => person.name == body.name))
-    if (nombreRepetido) {
-        return response.status(400).json({ 
-          error: 'El nombre debe ser unico' 
-        })
-    }
-  
-    const person = {
-        id: generateId(),
-        name: body.name,
-        number: body.number
-    }
-    persons = persons.concat(person)
-    response.json(person)
+  if (!body.name) {
+    return response.status(400).json({ error: 'name missing' })
+  }
+  if (!body.number) {
+    return response.status(400).json({ error: 'number missing' })
+  }
+
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 //const PORT = 3001
