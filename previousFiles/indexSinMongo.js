@@ -1,10 +1,7 @@
 
 // CONFIGURACIÓN: INICIO
-require('dotenv').config()
 const express = require('express')
 const app = express()
-
-const Person = require('./models/person')
 
 const cors = require('cors')
 app.use(cors())
@@ -22,6 +19,31 @@ morgan.token('cuerpo', function(req, res) {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :cuerpo'))
 // CONFIGURACIÓN: FIN
 
+// DATOS: INICIO
+let persons = [
+    { 
+        "id": 1,
+        "name": "Arto Hellas", 
+        "number": "040-123456"
+    },
+    { 
+        "id": 2,
+        "name": "Ada Lovelace", 
+        "number": "39-44-5323523"
+    },
+    { 
+        "id": 3,
+        "name": "Dan Abramov", 
+        "number": "12-43-234345"
+    },
+    { 
+        "id": 4,
+        "name": "Mary Poppendieck", 
+        "number": "39-23-6423122"
+    }
+]
+// DATOS: FIN
+
 // Ruta get('/'
 app.get('/', function (req, res) {
   res.send('hello, world!')
@@ -29,42 +51,32 @@ app.get('/', function (req, res) {
 
 // Ruta get('/info'
 app.get('/info', (request, response) => {
-  const now = new Date();
-  const fecha = now.toString()
-  Person.find({}).then(persons => {
-    console.log('persons :>> ', persons);
     const numPersons = persons.length
-    response.send(
-      `<p>La agenda tiene ${numPersons} ${numPersons == 1 ? 'persona' : 'personas'} incluidas</p>
-      <p>${fecha}</p>`
-      )
-  })
+    const now = new Date();
+    const fecha = now.toString()
     
-  // response.send(
-  //     `<p>La agenda tiene ${numPersons} ${numPersons == 1 ? 'persona' : 'personas'} incluidas</p>
-  //     <p>${fecha}</p>`
-  //     )
+    response.send(
+        `<p>La agenda tiene ${numPersons} ${numPersons == 1 ? 'persona' : 'personas'} incluidas</p>
+        <p>${fecha}</p>`
+        )
 })
 
 // Ruta get('/api/persons'
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(result => {
-    console.log('result :>> ', result);
-    response.json(result)
-  })
+    response.json(persons)
 })
 
 // Ruta get('/api/persons/:id'
 app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
+    const id = Number(request.params.id)
+    console.log('id :>> ', id);
+    const person = persons.find(person => person.id === id)
+  
     if (person) {
       response.json(person)
     } else {
       response.status(404).end()
     }
-  })
-  
-    
   })
 
 // Ruta delete('/api/persons/:id'
