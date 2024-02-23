@@ -68,14 +68,12 @@ app.get('/api/persons/:id', (request, response) => {
   })
 
 // Ruta delete('/api/persons/:id'
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const personaEliminada = persons.find(person => person.id == id)
-    persons = persons.filter(person => person.id !== id)
-  
-    console.log('personaEliminada BackEnd :>> ', personaEliminada);
-    //response.status(204).end() // Respuesta sin conectar al con el FrontEnd
-    response.json(personaEliminada) // Respuesta conectando con el FrontEnd
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.json( {"id":request.params.id} )
+    })
+    .catch(error => next(error))
 })
 
 const generateId = () => {
