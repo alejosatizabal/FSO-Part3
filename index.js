@@ -59,11 +59,6 @@ app.get('/info', (request, response) => {
       <p>${fecha}</p>`
       )
   })
-    
-  // response.send(
-  //     `<p>La agenda tiene ${numPersons} ${numPersons == 1 ? 'persona' : 'personas'} incluidas</p>
-  //     <p>${fecha}</p>`
-  //     )
 })
 
 // Ruta get('/api/persons'
