@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /*
     Se hace la conexión de la siguiente manera desde la terminal de este proyecto
         node mongo.js 0GzKyVBkn3xfruvQ
@@ -15,11 +16,11 @@ let opcion = 0
 if (process.argv.length<3) {
   console.log('ingresar al menos el password')
   process.exit(1)
-}else if(process.argv.length == 3){
+}else if(process.argv.length === 3){
   password = process.argv[2]
   opcion = 1
 }
-else if(process.argv.length == 5){
+else if(process.argv.length === 5){
   password = process.argv[2]
   nombre = process.argv[3]
   telefono = process.argv[4]
@@ -49,19 +50,19 @@ const person = new Person({
   number: telefono,
 })
 
-if(opcion == 1){
+if(opcion === 1){
   Person.find({}).then(result => {
-    console.log('phonebook:');
+    console.log('phonebook:')
     result.forEach(person => {
-      console.log(person.name + " " + person.number)
+      console.log(person.name + ' ' + person.number)
     })
     mongoose.connection.close()
   })
 }
 
-if(opcion == 2){
+if(opcion === 2){
   person.save().then(result => {
-    console.log(`added ${result.name} number ${result.number} to phonebook`);
+    console.log(`added ${result.name} number ${result.number} to phonebook`)
     mongoose.connection.close()
   })
 }
